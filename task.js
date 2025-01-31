@@ -45,7 +45,6 @@ function taskStatus() {
             const task = tasks.find(task => task.id === id);
             if (task) {
                 task.status = newStatus;  // Update the task status
-                console.log('Updated Tasks:', tasks);  // Log the updated tasks array
             } else {
                 console.log('Task not found');
             }
