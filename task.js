@@ -1,5 +1,13 @@
 // Task Management System
 
+const readline = require('readline');
+
+// Create an interface for reading input from the user
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 let tasks = [];   //an empty array to store all tasks
 
 //function to add a task
@@ -27,28 +35,44 @@ function viewTask() {
 }
 
 //function to update the status of a task
-function taskStatus(id) {
-    const task = tasks.find(task => task.id === id);
-    if (task) {
-        task.status = 'completed';
-        return tasks;
-    }
+function taskStatus() {
+    // Ask the user for the task ID
+    rl.question('Enter the task ID: ', (id) => {
+        id = parseInt(id);  // Convert input to an integer
+
+        // Ask the user for the new status
+        rl.question('Enter the new status: ', (newStatus) => {
+            const task = tasks.find(task => task.id === id);
+            if (task) {
+                task.status = newStatus;  // Update the task status
+                console.log('Updated Tasks:', tasks);  // Log the updated tasks array
+            } else {
+                console.log('Task not found');
+            }
+
+            rl.close();  // Close the readline interface after user input
+        });
+    });
 }
 
 //function to delete a task
 function deleteTask(id) {
-    const del = tasks.find(task => task.id === id);
-    if (del) {
-        tasks.splice(id);
+    const del = tasks.findIndex(task => task.id === id);  //Find the index of the task with the given id
+    if (del !== -1) {   //If task is found (index !== -1), remove it from the array
+        tasks.splice(del, 1);    // Remove 1 task at the found index
         return tasks;
+    } else {
+        console.log('Task not found');
     }
 }
 
 addTask("clean the house", "mix water with detergent and mop the rooms");
 addTask("visit orphanage", "buy books, pens, pencils, clothings and shoes");
+
 viewTask();
-// taskStatus(1);
-const update = taskStatus(1);
+
+const update = taskStatus();
 console.log("Updated Tasks :", update);
-const delt = deleteTask(1);
-console.log("Updated Tasks :", delt);
+
+// const delt = deleteTask(2);
+// console.log("Updated Tasks after deletion :", delt);
